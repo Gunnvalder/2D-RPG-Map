@@ -417,7 +417,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.44, y: 6.28, z: -10}
+  m_LocalPosition: {x: 7.36, y: 6.28, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -453,8 +453,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyTilemap: {fileID: 474977069}
-  wallTile: {fileID: 11400000, guid: 29b42aa675745b54b85b717b8cf0df1e, type: 2}
-  FloorTile: {fileID: 11400000, guid: def2872d8c92ab441879c39f475652ec, type: 2}
+  wall: {fileID: 11400000, guid: 653dd4bfe0d09c84289e3cd37edc69bc, type: 2}
+  floor: {fileID: 11400000, guid: 2d7601e342ff5ad45bdea68cf1ec1ded, type: 2}
+  chest: {fileID: 11400000, guid: 0fd95585c8f5b8b4faf5fca98cdc86ff, type: 2}
+  door: {fileID: 11400000, guid: e91fb867ba9499a4593658a8883411af, type: 2}
 --- !u!4 &556394940
 Transform:
   m_ObjectHideFlags: 0
