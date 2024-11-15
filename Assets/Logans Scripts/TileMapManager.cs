@@ -15,7 +15,7 @@ public class TileMapManager : MonoBehaviour
     public Tile door;
     public Tile playerTile;
 
-    char[,] map = new char[20, 15];
+    char[,] map = new char[20, 20];
 
     private Vector3Int CurrentCell; 
     public float moveSpeed = 1f;
@@ -25,8 +25,8 @@ public class TileMapManager : MonoBehaviour
         GenerateMap(); //Gererate the map 
         DrawTileMap(); // draw the map
 
-        CurrentCell = MyTilemap.WorldToCell(transform.position);
-        DrawPlayerTile();
+        CurrentCell = new Vector3Int(1,1,0);
+        MyTilemap.SetTile(CurrentCell, playerTile);
     }
 
     private void Update()
@@ -43,11 +43,11 @@ public class TileMapManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            moveDirection = new Vector3Int(-1,0,0);
+            moveDirection = new Vector3Int(1,0,0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            moveDirection = new Vector3Int(1, 0, 0);
+            moveDirection = new Vector3Int(-1, 0, 0);
         }
 
         if (moveDirection != Vector3Int.zero)
@@ -56,13 +56,16 @@ public class TileMapManager : MonoBehaviour
 
             TileBase targetTile = MyTilemap.GetTile(targetCell);
 
+            // check if tile is a floor or a door 
             if (targetTile != null && (targetTile == floor || targetTile == door))
             {
                 MyTilemap.SetTile(CurrentCell, floor);
 
+                // update player position 
                 CurrentCell = targetCell;
 
-                DrawPlayerTile();
+                // set the player position
+                MyTilemap.SetTile(CurrentCell, playerTile);
             }
         }
     }
@@ -92,7 +95,7 @@ public class TileMapManager : MonoBehaviour
                 {
                     //Debug.Log($"         starting x {x} y is {y} map length {map.GetLength(0)}");
 
-                    int randx = rand.Next(1, map.GetLength(0) - 1);
+                    int randx = rand.Next(1, map.GetLength(1) - 1);
                     int randy = rand.Next(1, map.GetLength(1) - 1);
 
                     //Debug.Log($"      Is X {x} == 0 ? {x == 0} is x == the matp length - 1? {x == map.GetLength(0) - 1}");
@@ -100,11 +103,10 @@ public class TileMapManager : MonoBehaviour
                     {
                         //Debug.Log($"         Conditions for wall found for  x {x} y is {y} Making it a wall now");
                         map[x, y] = '#';//wall
-                        map[randx, randy] = '#';
                     }
                     else
                     {
-                        map[x, y] = '.';//floor
+                        map[x, y] = rand.Next(0, 5) == 0 ? '#' : '.';
                     }
                 }
             }
@@ -149,23 +151,6 @@ public class TileMapManager : MonoBehaviour
             }
         }
 
-        for (int y = 0; y < map.GetLength(0); y++)
-        {
-            for (int x = 0; x < map.GetLength(1); x++)
-            {
-                if (x > 0 && x < map.GetLength(0) - 1 && y > 0 && y < map.GetLength(1) - 1)
-                {
-                    map[x, y] = '@';
-                }
-            }
-        }
-
-    }
-
-    void DrawPlayerTile()
-    {
-        MyTilemap.SetTile(CurrentCell, floor);
-        MyTilemap.SetTile(CurrentCell, playerTile);
     }
 
     void DrawTileMap()
