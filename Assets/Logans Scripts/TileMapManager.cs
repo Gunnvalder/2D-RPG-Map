@@ -45,7 +45,7 @@ public class TileMapManager : MonoBehaviour
         {
             moveDirection = new Vector3Int(1,0,0);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.A))
         {
             moveDirection = new Vector3Int(-1, 0, 0);
         }
