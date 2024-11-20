@@ -4,16 +4,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class TileMapManager : MonoBehaviour
 {
 
     public Tilemap MyTilemap;
-    public Tile wall;
-    public Tile floor;
-    public Tile chest;
-    public Tile door;
-    public Tile playerTile;
+    public Tile wall; //"#"
+    public Tile floor;//"."
+    public Tile chest;//"$"
+    public Tile door;//"0"
+    public Tile playerTile;//"@"
+    public Tile EnemyTile;//"!"
 
     char[,] map = new char[20, 20];
 
@@ -98,7 +100,7 @@ public class TileMapManager : MonoBehaviour
                     int randx = rand.Next(1, map.GetLength(1) - 1);
                     int randy = rand.Next(1, map.GetLength(1) - 1);
 
-                    //Debug.Log($"      Is X {x} == 0 ? {x == 0} is x == the matp length - 1? {x == map.GetLength(0) - 1}");
+                    //Debug.Log($"      Is X {x} == 0 ? {x == 0} is x == the map length - 1? {x == map.GetLength(0) - 1}");
                     if (x == 0 || x == map.GetLength(0) - 1 || y == 0 || y == map.GetLength(1) - 1)
                     {
                         //Debug.Log($"         Conditions for wall found for  x {x} y is {y} Making it a wall now");
@@ -110,15 +112,6 @@ public class TileMapManager : MonoBehaviour
                     }
                 }
             }
-        
-
-
-
-        // for each grid read y starting at 1 in the y 
-            // for each grid read x starting at 1 in the x 
-                // if 
-
-
 
         int doorCount = 0;
         while (doorCount < 4)
@@ -136,8 +129,6 @@ public class TileMapManager : MonoBehaviour
 
         //places chests ($) in random places 
         int chestCount = 0; 
-        // Spawn random chest (randC)
-        System.Random randC = new System.Random();
         while (chestCount < 2) // max chests
         {
             int randx = rand.Next(1, map.GetLength(0) - 1);
@@ -151,6 +142,17 @@ public class TileMapManager : MonoBehaviour
             }
         }
 
+        int enemyCount = 0;
+        while (enemyCount < 2)
+        {
+            int randx = rand.Next(1, map.GetLength(0) - 1);
+            int randy = rand.Next(1, map.GetLength(1) - 1);
+            if (map[randx, randy] == '.' && map[randx, randy] != '#' && map[randx + 1, randy] != '#' && map[randx, randy - 1] != '#' && map[randx, randy + 1] != '#' && map[randx,randy] != '$')
+            {
+                map[randx, randy] = '!';//enemy
+                enemyCount++;
+            }
+        }
     }
 
     void DrawTileMap()
@@ -175,6 +177,10 @@ public class TileMapManager : MonoBehaviour
                 else if (map[x,y] == '$')// chest
                 {
                     MyTilemap.SetTile(Cellposition, chest);
+                }
+                else if (map[x,y] == '!')
+                {
+                    MyTilemap.SetTile(Cellposition, EnemyTile);
                 }
             }
         }

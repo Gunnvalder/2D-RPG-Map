@@ -148,56 +148,36 @@ Tilemap:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 474977068}
   m_Enabled: 1
-  m_Tiles:
-  - first: {x: 2, y: 3, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 3, y: 3, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
+  m_Tiles: {}
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 2
-    m_Data: {fileID: 11400000, guid: be71e77a5da83a746b177bbdf790cf58, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 2
-    m_Data: {fileID: -2050173700, guid: e96a190b9cab6cf458168e3e960169b3, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 2
+  - m_RefCount: 0
     m_Data:
-      e00: 1
+      e00: 7.0684684e+28
       e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
+      e02: -1.2884918e+10
+      e03: -1.2884918e+10
+      e10: 2.7900757e+20
+      e11: 0
+      e12: 4.89e-43
+      e13: 4.89e-43
+      e20: -368875000
+      e21: -0.83354473
+      e22: 1.2921728e-28
+      e23: -3.73575e+19
+      e30: 4.5904e-41
+      e31: 4.93e-43
+      e32: 4.9e-43
+      e33: 4.92e-43
   m_TileColorArray:
-  - m_RefCount: 2
-    m_Data: {r: 1, g: 1, b: 1, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 4.2123e-41, g: 4.2123e-41, b: 4.2123e-41, a: 4.2123e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -458,6 +438,7 @@ MonoBehaviour:
   chest: {fileID: 11400000, guid: 0fd95585c8f5b8b4faf5fca98cdc86ff, type: 2}
   door: {fileID: 11400000, guid: e91fb867ba9499a4593658a8883411af, type: 2}
   playerTile: {fileID: 11400000, guid: 9aef5adf0e084ca4f9bd5ce3f16d1867, type: 2}
+  EnemyTile: {fileID: 11400000, guid: 05359b9766ae54d4fae607a05db43999, type: 2}
   moveSpeed: 1
 --- !u!4 &556394940
 Transform:
