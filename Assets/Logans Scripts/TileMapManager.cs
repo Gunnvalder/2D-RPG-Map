@@ -10,7 +10,7 @@ public class TileMapManager : MonoBehaviour
 {
 
     public Tilemap MyTilemap;
-    public Tile wall; //"#"
+    public Tile wall;//"#"
     public Tile floor;//"."
     public Tile chest;//"$"
     public Tile door;//"0"
@@ -19,14 +19,19 @@ public class TileMapManager : MonoBehaviour
 
     char[,] map = new char[20, 20];
 
-    private Vector3Int CurrentCell; 
+    private Vector3Int CurrentCell;
     public float moveSpeed = 1f;
+
+    private Vector3Int CurrentEnemyCell;
+    public float enemyMoveSpeed = 1f;
 
     private void Start()
     {
         GenerateMap(); //Gererate the map 
         DrawTileMap(); // draw the map
 
+        CurrentEnemyCell = new Vector3Int(5,5,0);
+        MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
         CurrentCell = new Vector3Int(1,1,0);
         MyTilemap.SetTile(CurrentCell, playerTile);
     }
@@ -68,6 +73,49 @@ public class TileMapManager : MonoBehaviour
 
                 // set the player position
                 MyTilemap.SetTile(CurrentCell, playerTile);
+            }
+        }
+
+        Vector3Int EnemyMoveDirection = Vector3Int.zero;
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            EnemyMoveDirection = CurrentCell;
+            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            EnemyMoveDirection = CurrentCell;
+            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            EnemyMoveDirection = CurrentCell;
+            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            EnemyMoveDirection = CurrentCell;
+            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+        }
+
+        if (EnemyMoveDirection != Vector3Int.zero)
+        {
+            Vector3Int EnemyTargetCell = CurrentEnemyCell + EnemyMoveDirection;
+            //Debug.Log($"EnemyTargetCell{EnemyTargetCell} CurrentEnemyCell{CurrentEnemyCell} EnemyMoveDirection{EnemyMoveDirection} ");
+
+            TileBase EnemyTargetTile = MyTilemap.GetTile(EnemyTargetCell);
+
+            // check if tile is a floor or a door 
+            if (EnemyTargetTile != null && (EnemyTargetTile == floor || EnemyTargetTile == door))
+            {
+                MyTilemap.SetTile(CurrentEnemyCell, floor);
+
+                // update enemy position 
+                CurrentEnemyCell = EnemyTargetCell;
+
+                // set the enemy position
+                MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
             }
         }
     }
@@ -141,18 +189,6 @@ public class TileMapManager : MonoBehaviour
                 chestCount++;
             }
         }
-
-        int enemyCount = 0;
-        while (enemyCount < 2)
-        {
-            int randx = rand.Next(1, map.GetLength(0) - 1);
-            int randy = rand.Next(1, map.GetLength(1) - 1);
-            if (map[randx, randy] == '.' && map[randx, randy] != '#' && map[randx + 1, randy] != '#' && map[randx, randy - 1] != '#' && map[randx, randy + 1] != '#' && map[randx,randy] != '$')
-            {
-                map[randx, randy] = '!';//enemy
-                enemyCount++;
-            }
-        }
     }
 
     void DrawTileMap()
@@ -177,10 +213,6 @@ public class TileMapManager : MonoBehaviour
                 else if (map[x,y] == '$')// chest
                 {
                     MyTilemap.SetTile(Cellposition, chest);
-                }
-                else if (map[x,y] == '!')
-                {
-                    MyTilemap.SetTile(Cellposition, EnemyTile);
                 }
             }
         }
