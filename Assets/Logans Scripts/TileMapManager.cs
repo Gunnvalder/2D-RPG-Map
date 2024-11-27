@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class TileMapManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class TileMapManager : MonoBehaviour
     public Tile playerTile;//"@"
     public Tile EnemyTile;//"!"
 
+    public TextMeshProUGUI WinText;
+
     char[,] map = new char[20, 20];
 
     private Vector3Int CurrentCell;
@@ -24,6 +27,8 @@ public class TileMapManager : MonoBehaviour
 
     private Vector3Int CurrentEnemyCell;
     public float enemyMoveSpeed = 1f;
+
+    private bool playerHasMoved = false;
 
     private void Start()
     {
@@ -34,23 +39,36 @@ public class TileMapManager : MonoBehaviour
         MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
         CurrentCell = new Vector3Int(1,1,0);
         MyTilemap.SetTile(CurrentCell, playerTile);
+
+        WinText.gameObject.SetActive(false);
     }
 
     private void Update()
+    {
+        HandlePlayerMovement();
+
+        if (playerHasMoved)
+        {
+            HandleEnemyMovement();
+            playerHasMoved = false;
+        }
+    }
+
+    void HandlePlayerMovement()
     {
         Vector3Int moveDirection = Vector3Int.zero;
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            moveDirection = new Vector3Int(0,1,0);
+            moveDirection = new Vector3Int(0, 1, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.S)) 
-        { 
-            moveDirection = new Vector3Int(0,-1,0); 
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            moveDirection = new Vector3Int(0, -1, 0);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            moveDirection = new Vector3Int(1,0,0);
+            moveDirection = new Vector3Int(1, 0, 0);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
@@ -63,8 +81,8 @@ public class TileMapManager : MonoBehaviour
 
             TileBase targetTile = MyTilemap.GetTile(targetCell);
 
-            // check if tile is a floor or a door 
-            if (targetTile != null && (targetTile == floor || targetTile == door))
+            // check if tile is a floor  
+            if (targetTile != null && (targetTile == floor))
             {
                 MyTilemap.SetTile(CurrentCell, floor);
 
@@ -73,41 +91,41 @@ public class TileMapManager : MonoBehaviour
 
                 // set the player position
                 MyTilemap.SetTile(CurrentCell, playerTile);
+
+                playerHasMoved = true;
             }
         }
+    }
 
+    void HandleEnemyMovement()
+    {
         Vector3Int EnemyMoveDirection = Vector3Int.zero;
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (CurrentEnemyCell.x < CurrentCell.x)
         {
-            EnemyMoveDirection = CurrentCell;
-            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+            EnemyMoveDirection = new Vector3Int(1, 0, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (CurrentEnemyCell.x > CurrentCell.x)
         {
-            EnemyMoveDirection = CurrentCell;
-            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+            EnemyMoveDirection = new Vector3Int(-1, 0, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (CurrentEnemyCell.y < CurrentCell.y)
         {
-            EnemyMoveDirection = CurrentCell;
-            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+            EnemyMoveDirection = new Vector3Int(0, 1, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (CurrentEnemyCell.y > CurrentCell.y)
         {
-            EnemyMoveDirection = CurrentCell;
-            Debug.Log($"EnemyMoveDirection {EnemyMoveDirection} CurrentCell {CurrentCell}");
+            EnemyMoveDirection = new Vector3Int(0, -1, 0);
         }
 
         if (EnemyMoveDirection != Vector3Int.zero)
         {
             Vector3Int EnemyTargetCell = CurrentEnemyCell + EnemyMoveDirection;
-            //Debug.Log($"EnemyTargetCell{EnemyTargetCell} CurrentEnemyCell{CurrentEnemyCell} EnemyMoveDirection{EnemyMoveDirection} ");
 
             TileBase EnemyTargetTile = MyTilemap.GetTile(EnemyTargetCell);
 
-            // check if tile is a floor or a door 
-            if (EnemyTargetTile != null && (EnemyTargetTile == floor || EnemyTargetTile == door))
+            // check if tile is a floor
+            if (EnemyTargetTile != null && (EnemyTargetTile == floor))
             {
                 MyTilemap.SetTile(CurrentEnemyCell, floor);
 
@@ -162,7 +180,7 @@ public class TileMapManager : MonoBehaviour
             }
 
         int doorCount = 0;
-        while (doorCount < 4)
+        while (doorCount < 1)
         {
             int randx = rand.Next(1, map.GetLength(0) - 1);
             int randy = rand.Next(1, map.GetLength(1) - 1);
