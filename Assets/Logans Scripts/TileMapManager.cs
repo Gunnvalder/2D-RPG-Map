@@ -35,14 +35,13 @@ public class TileMapManager : MonoBehaviour
         GenerateMap(); //Gererate the map 
         DrawTileMap(); // draw the map
 
-        CurrentEnemyCell = new Vector3Int(5,5,0);
+        CurrentEnemyCell = new Vector3Int(9,9,0);
         MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
         CurrentCell = new Vector3Int(1,1,0);
         MyTilemap.SetTile(CurrentCell, playerTile);
 
         WinText.gameObject.SetActive(false);
     }
-
     private void Update()
     {
         HandlePlayerMovement();
