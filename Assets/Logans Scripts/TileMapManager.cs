@@ -19,6 +19,9 @@ public class TileMapManager : MonoBehaviour
     public Tile EnemyTile;//"!"
 
     public TextMeshProUGUI WinText;
+    public TextMeshProUGUI ChestText;
+    public TextMeshProUGUI HealthText;
+    public TextMeshProUGUI GameOvertext;
 
     char[,] map = new char[20, 20];
 
@@ -29,6 +32,11 @@ public class TileMapManager : MonoBehaviour
     public float enemyMoveSpeed = 1f;
 
     private bool playerHasMoved = false;
+
+    public int playerHealth = 3;
+    public int enemyHealth = 2;
+
+    public int enemyDamage = 1;
 
     private void Start()
     {
@@ -41,6 +49,8 @@ public class TileMapManager : MonoBehaviour
         MyTilemap.SetTile(CurrentCell, playerTile);
 
         WinText.gameObject.SetActive(false);
+        GameOvertext.gameObject.SetActive(false);
+        HealthText.text = "Health: " + playerHealth;
     }
     private void Update()
     {
@@ -51,6 +61,23 @@ public class TileMapManager : MonoBehaviour
             HandleEnemyMovement();
             playerHasMoved = false;
         }
+    }
+
+    void TakeDamage(int damage)
+    {
+        playerHealth -= damage;
+        HealthText.text = "Health: " + playerHealth;
+
+        if (playerHealth <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    void GameOver()
+    {
+        GameOvertext.gameObject.SetActive(true);
+        Time.timeScale = 0;
     }
 
     void HandlePlayerMovement()
@@ -79,6 +106,11 @@ public class TileMapManager : MonoBehaviour
             Vector3Int targetCell = CurrentCell + moveDirection;
 
             TileBase targetTile = MyTilemap.GetTile(targetCell);
+
+            if (targetTile == EnemyTile)
+            {
+                TakeDamage(enemyDamage);
+            }
 
             // check if tile is a floor  
             if (targetTile != null && (targetTile == floor))
@@ -133,6 +165,11 @@ public class TileMapManager : MonoBehaviour
 
                 // set the enemy position
                 MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
+            }
+
+            if (CurrentEnemyCell == CurrentCell)
+            {
+                TakeDamage(enemyDamage);
             }
         }
     }

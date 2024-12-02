@@ -8,5 +8,6 @@ public class ExitScript : MonoBehaviour
     public void OnClick()
     {
         Application.Quit();
+        Debug.Log("Exit button pressed");
     }
 }
