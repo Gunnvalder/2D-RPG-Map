@@ -36,6 +36,8 @@ public class TileMapManager : MonoBehaviour
     public int playerHealth = 3;
     public int enemyHealth = 2;
 
+    public int chestNumber = 0;
+
     public int enemyDamage = 1;
 
     private void Start()
@@ -51,6 +53,7 @@ public class TileMapManager : MonoBehaviour
         WinText.gameObject.SetActive(false);
         GameOvertext.gameObject.SetActive(false);
         HealthText.text = "Health: " + playerHealth;
+        ChestText.text = "Chests: " + chestNumber;
     }
     private void Update()
     {
@@ -110,6 +113,11 @@ public class TileMapManager : MonoBehaviour
             if (targetTile == EnemyTile)
             {
                 TakeDamage(enemyDamage);
+            }
+
+            if (targetTile == chest)
+            {
+                pickUpChest(targetCell);
             }
 
             // check if tile is a floor  
@@ -172,6 +180,13 @@ public class TileMapManager : MonoBehaviour
                 TakeDamage(enemyDamage);
             }
         }
+    }
+
+    void pickUpChest(Vector3Int chestPosition)
+    {
+        MyTilemap.SetTile(chestPosition, floor);
+        chestNumber++;
+        ChestText.text = "Chests: " + chestNumber;
     }
 
     void GenerateMap()
