@@ -33,6 +33,8 @@ public class TileMapManager : MonoBehaviour
 
     private bool playerHasMoved = false;
 
+    private bool isGameOver = false;
+
     public int playerHealth = 3;
     public int enemyHealth = 2;
 
@@ -80,11 +82,16 @@ public class TileMapManager : MonoBehaviour
     void GameOver()
     {
         GameOvertext.gameObject.SetActive(true);
-        Time.timeScale = 0;
+        isGameOver = true;
     }
 
     void HandlePlayerMovement()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+
         Vector3Int moveDirection = Vector3Int.zero;
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -118,6 +125,12 @@ public class TileMapManager : MonoBehaviour
             if (targetTile == chest)
             {
                 pickUpChest(targetCell);
+            }
+
+            if (targetTile == door && chestNumber == 2)
+            {
+                WinText.gameObject.SetActive(true);
+                isGameOver = true;
             }
 
             // check if tile is a floor  
@@ -173,11 +186,6 @@ public class TileMapManager : MonoBehaviour
 
                 // set the enemy position
                 MyTilemap.SetTile(CurrentEnemyCell, EnemyTile);
-            }
-
-            if (CurrentEnemyCell == CurrentCell)
-            {
-                TakeDamage(enemyDamage);
             }
         }
     }
